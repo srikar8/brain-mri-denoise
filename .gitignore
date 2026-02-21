@@ -1,0 +1,28 @@
+# Data (full datasets; use sample/ for demo images)
+data/
+
+# Model artifacts (checkpoints/ is committed for Docker/Render build)
+model.onnx
+predictions/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Env and IDE
+.env
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Build / Docker (optional)
+dist/
+build/
