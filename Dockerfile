@@ -1,5 +1,6 @@
 # Brain MRI Denoising - ONNX API only (no PyTorch). Export model first: python scripts/export_onnx.py -c checkpoints/best.pt -o model.onnx
-FROM python:3.11-slim
+# Pin platform so onnxruntime wheel matches runtime (e.g. Render)
+FROM --platform=linux/amd64 python:3.11-slim
 WORKDIR /app
 COPY requirements-onnx.txt .
 RUN pip install --upgrade pip && \

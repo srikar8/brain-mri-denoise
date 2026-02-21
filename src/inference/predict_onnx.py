@@ -6,8 +6,11 @@ import numpy as np
 
 try:
     import onnxruntime as ort
-except ImportError:
+except Exception as e:
     ort = None
+    _onnx_import_error = e
+else:
+    _onnx_import_error = None
 
 INPUT_NAME = "input"
 OUTPUT_NAME = "output"
@@ -15,7 +18,10 @@ OUTPUT_NAME = "output"
 
 def load_model(checkpoint_path: str) -> Any:
     if ort is None:
-        raise RuntimeError("onnxruntime is required for ONNX inference. Install with: pip install onnxruntime")
+        msg = "onnxruntime is required for ONNX inference. Install with: pip install onnxruntime"
+        if _onnx_import_error is not None:
+            raise RuntimeError(f"{msg} (import failed: {_onnx_import_error})") from _onnx_import_error
+        raise RuntimeError(msg)
     path = Path(checkpoint_path)
     if not path.is_file():
         raise FileNotFoundError(f"ONNX model not found: {checkpoint_path}")
