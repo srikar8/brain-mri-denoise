@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends patchelf && rm 
     patchelf --clear-execstack /usr/local/lib/python3.11/site-packages/onnxruntime/capi/*.so
 COPY config/ config/
 COPY src/ src/
+COPY sample/ sample/
 COPY model.onnx /app/model.onnx
 ENV PYTHONPATH=/app
 ENV DENOISE_CHECKPOINT=/app/model.onnx

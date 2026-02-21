@@ -3,6 +3,7 @@
 
 # Model artifacts (checkpoints/ is committed for Docker/Render build)
 predictions/
+benchmark_results.json
 
 # Python
 .venv/

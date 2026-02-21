@@ -23,6 +23,7 @@ Use a brain tumor MRI dataset (e.g. [Brain Tumor MRI from Kaggle](https://www.ka
 
 - This repo uses **no real patient data or PHI**. Training uses only synthetic noise applied to public/demo images.
 - If you use your own data, ensure you have appropriate rights and handle data in line with your policies (retention, de-identification, access).
+- For audits: keep PHI out of logs, checkpoints, and CI artifacts; use synthetic or de-identified data only in the repo.
 
 ## Config
 
@@ -90,10 +91,10 @@ python scripts/export_onnx.py --checkpoint checkpoints/best.pt --output model.on
 ## Benchmark (inference latency)
 
 ```bash
-python scripts/benchmark_inference.py --checkpoint checkpoints/best.pt --sizes 256 512
+python scripts/benchmark_inference.py --checkpoint checkpoints/best.pt --sizes 256 512 [--output benchmark_results.json]
 ```
 
-Reports mean latency (ms/image) and, on CUDA, peak GPU memory. Use ONNX/ONNX Runtime for additional deployment benchmarks.
+Reports mean latency (ms/image) and, on CUDA, peak GPU memory. Use `--output` to write a JSON summary (performance under different input sizes). Use ONNX/ONNX Runtime for additional deployment benchmarks.
 
 ## Model comparison (ablations)
 
@@ -109,7 +110,7 @@ To compare configurations (e.g. L1 vs L2, Gaussian vs Rician, depth), change `co
 
 - **Local:** Run uvicorn or CLI as above.
 - **Docker:** Build and run the API container; mount checkpoints and expose port 8000.
-- **Cloud:** Deploy the Docker image to a container service (e.g. AWS ECS, GCP Cloud Run, Azure Container Apps) with DENOISE_CHECKPOINT set and checkpoints in a mounted volume or object store.
+- **Cloud:** Deploy the Docker image to a container service (e.g. Render, AWS ECS, GCP Cloud Run, Azure Container Apps) with DENOISE_CHECKPOINT set and checkpoints in a mounted volume or object store. For ONNX-only (no PyTorch), use `requirements-onnx.txt` and build with an exported `model.onnx` in the image.
 
 ## Documentation and compliance
 

@@ -36,6 +36,10 @@ Unit tests, integration-style tests, and one system-level smoke test for the Bra
 - **API:** Start server; POST image to /denoise; verify 200 and response is PNG.
 - **Docker:** Build image, run with mounted checkpoint; call /denoise or CLI; verify output.
 
+### 2.4 Performance under different conditions
+
+- Run `scripts/benchmark_inference.py --checkpoint <path> --sizes 256 512 [--output benchmark_results.json]` to record latency and (on CUDA) GPU memory per input size. Use `--output` to persist a summary for audits or regression.
+
 ## 3. CI
 
 - GitHub Actions: lint (ruff), full unit + smoke test suite on push/PR. See `.github/workflows/ci.yml`.

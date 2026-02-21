@@ -16,6 +16,10 @@ Research/demonstration: brain MRI denoising using a U-Net trained on synthetic n
 | Service unavailability | API down, container failure | Low | Possible | Logs; restart policy; deployment docs. |
 | Dependency vulnerability | Outdated or vulnerable libraries | Medium | Possible | Pinned requirements; periodic review; CI on dependencies. |
 
+## Usability (IEC 62366)
+
+API and CLI are for operator/researcher use; no direct patient interaction. For SaMD, a formal usability engineering process would apply.
+
 ## Residual Risk
 
 Accepted for a non–clinical, demonstrator system with disclaimers and no claim of regulatory compliance. For a real SaMD, a full QMS (e.g. ISO 13485, IEC 62304) and documented risk management would be required.
