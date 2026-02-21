@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Create minimal dummy MRI-like images under data/brain_mri for testing training without external dataset."""
-import sys
 from pathlib import Path
 
 import numpy as np

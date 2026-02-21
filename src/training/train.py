@@ -1,5 +1,4 @@
 """Training loop: config-driven, fixed seed, validation with PSNR/SSIM."""
-import os
 from pathlib import Path
 from typing import Any, Dict
 
