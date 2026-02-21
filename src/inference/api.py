@@ -1,4 +1,4 @@
-"""FastAPI inference: upload image, return denoised image."""
+"""FastAPI inference: upload image, return denoised image. Uses ONNX when checkpoint is .onnx (no PyTorch)."""
 import io
 import os
 from contextlib import asynccontextmanager
@@ -8,22 +8,36 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, Response
 from PIL import Image
 
-from .predict import load_model, denoise_image
-from ..utils import get_device
-
 CHECKPOINT = os.environ.get("DENOISE_CHECKPOINT", "checkpoints/best.pt")
 _model = None
+_use_onnx = None
+
+
+def _denoise(model, img):
+    """Dispatch to ONNX or PyTorch denoise."""
+    if _use_onnx:
+        from .predict_onnx import denoise_image as denoise_onnx
+        return denoise_onnx(model, img)
+    from .predict import denoise_image as denoise_pt
+    return denoise_pt(model, img)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _model
+    global _model, _use_onnx
+    _model = None
+    _use_onnx = str(CHECKPOINT).endswith(".onnx")
     if os.path.isfile(CHECKPOINT):
-        _model = load_model(CHECKPOINT, get_device())
-    else:
-        _model = None
+        if _use_onnx:
+            from .predict_onnx import load_model as load_onnx
+            _model = load_onnx(CHECKPOINT)
+        else:
+            from .predict import load_model as load_pt
+            from ..utils import get_device
+            _model = load_pt(CHECKPOINT, get_device())
     yield
     _model = None
+    _use_onnx = None
 
 
 app = FastAPI(title="Brain MRI Denoising", lifespan=lifespan)
@@ -44,7 +58,7 @@ async def denoise(file: UploadFile = File(...)):
         img = np.array(Image.open(io.BytesIO(raw)).convert("L"), dtype=np.float32) / 255.0
     except Exception as e:
         raise HTTPException(400, f"Invalid image: {e}")
-    out = denoise_image(_model, img)
+    out = _denoise(_model, img)
     buf = io.BytesIO()
     Image.fromarray(out).save(buf, format="PNG")
     buf.seek(0)

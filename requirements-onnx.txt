@@ -1,0 +1,7 @@
+# Runtime only for ONNX inference (no PyTorch). Use for low-memory deployment e.g. Render free tier.
+onnxruntime==1.16.3
+numpy==1.26.2
+Pillow==10.1.0
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
