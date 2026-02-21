@@ -3,8 +3,10 @@
 FROM --platform=linux/amd64 python:3.11-slim
 WORKDIR /app
 COPY requirements-onnx.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir --timeout 120 -r requirements-onnx.txt
+RUN apt-get update && apt-get install -y --no-install-recommends patchelf && rm -rf /var/lib/apt/lists/* && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir --timeout 120 -r requirements-onnx.txt && \
+    patchelf --clear-execstack /usr/local/lib/python3.11/site-packages/onnxruntime/capi/*.so
 COPY config/ config/
 COPY src/ src/
 COPY model.onnx /app/model.onnx
