@@ -27,7 +27,7 @@ jobs:
         run: ruff check src scripts --ignore E501
 
       - name: Unit tests
-        run: pytest tests/ -v
+        run: PYTHONPATH=. pytest tests/ -v
 
   smoke-inference:
     runs-on: ubuntu-latest

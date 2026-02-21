@@ -1,5 +1,5 @@
 # Data (full datasets; use sample/ for demo images)
-data/
+/data/
 
 # Model artifacts (checkpoints/ is committed for Docker/Render build)
 model.onnx
