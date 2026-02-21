@@ -1,5 +1,4 @@
 """Brain MRI dataset with synthetic noise for denoising (noisy -> clean pairs)."""
-import os
 from pathlib import Path
 from typing import Optional, Tuple
 
